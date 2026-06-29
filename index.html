@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>叉车司机作业标准 — 考核问卷</title>
+<style>
+  :root {
+    --orange: #E87722;
+    --orange-light: #FFF3E8;
+    --navy: #1B2A4A;
+    --navy-light: #F0F3F8;
+    --green: #2E7D32;
+    --red: #C62828;
+    --gray: #666;
+    --border: #E0E0E0;
+    --white: #FFFFFF;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #F5F6FA;
+    color: #1B2A4A;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 32px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(232,119,34,0.15), transparent 60%);
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-top: 6px;
+    position: relative; z-index: 1;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    position: relative; z-index: 1;
+  }
+
+  /* Container */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Info bar */
+  .info-bar {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    font-size: 14px;
+    color: var(--gray);
+  }
+  .info-bar span { display: flex; align-items: center; gap: 6px; }
+  .info-bar .icon { font-size: 18px; }
+
+  /* Section header */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--orange);
+  }
+  .section-title .num {
+    background: var(--orange);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .section-title .txt {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-title .cnt {
+    font-size: 13px;
+    color: var(--gray);
+    margin-left: auto;
+  }
+
+  /* Question card */
+  .question {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--border);
+    transition: all 0.2s;
+  }
+  .question.answered { border-left-color: var(--orange); }
+  .question.correct-q { border-left-color: var(--green); background: #F1F8F4; }
+  .question.wrong-q { border-left-color: var(--red); background: #FFF5F5; }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    background: var(--navy-light);
+    color: var(--navy);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .q-type {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .type-single { background: #E3F2FD; color: #1565C0; }
+  .type-multi { background: #F3E5F5; color: #7B1FA2; }
+  .type-judge { background: #FFF3E0; color: #E65100; }
+  .q-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.5;
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 15px;
+    color: #333;
+    user-select: none;
+  }
+  .option:hover { border-color: var(--orange); background: var(--orange-light); }
+  .option.selected { border-color: var(--orange); background: var(--orange-light); font-weight: 600; }
+  .option.correct { border-color: var(--green); background: #E8F5E9; color: var(--green); }
+  .option.wrong { border-color: var(--red); background: #FFEBEE; color: var(--red); }
+  .option .mark {
+    width: 26px; height: 26px;
+    border: 2px solid #CCC;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .option.multi-opt .mark { border-radius: 6px; }
+  .option.selected .mark { border-color: var(--orange); background: var(--orange); color: white; }
+  .option.correct .mark { border-color: var(--green); background: var(--green); color: white; }
+  .option.wrong .mark { border-color: var(--red); background: var(--red); color: white; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: #E8F5E9; color: #2E7D32; border-left: 3px solid var(--green); }
+  .feedback.wrong-fb { background: #FFEBEE; color: #C62828; border-left: 3px solid var(--red); }
+
+  /* Score panel */
+  .score-panel {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    margin: 24px 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: none;
+  }
+  .score-panel.show { display: block; }
+  .score-big {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-pass { color: var(--green); }
+  .score-fail { color: var(--red); }
+  .score-detail { margin-top: 8px; font-size: 16px; color: var(--gray); }
+  .score-bar-bg {
+    height: 12px;
+    background: #EEE;
+    border-radius: 6px;
+    margin: 16px auto;
+    max-width: 400px;
+    overflow: hidden;
+  }
+  .score-bar-fg {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+
+  /* Buttons */
+  .btn-row { text-align: center; margin: 24px 0; }
+  .btn {
+    display: inline-block;
+    padding: 12px 36px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-submit { background: var(--orange); color: white; }
+  .btn-submit:hover { background: #D1651E; }
+  .btn-reset { background: var(--navy); color: white; margin-left: 10px; }
+  .btn-reset:hover { background: #0F1D35; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-copy {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    background: var(--green);
+    color: white;
+  }
+  .btn-copy:hover { opacity: 0.85; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: #AAA;
+    font-size: 12px;
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    /* 全局移动端优化 */
+    body { background: #F0F1F5; -webkit-tap-highlight-color: transparent; }
+    .header { padding: 20px 16px 16px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; margin-top: 4px; }
+    .header .badge { font-size: 11px; padding: 3px 10px; }
+
+    .container { padding: 10px; }
+
+    /* 信息栏压缩 */
+    .info-bar { padding: 10px 12px; margin-bottom: 12px; gap: 8px; font-size: 12px; flex-wrap: wrap; }
+
+    /* 分区标题 */
+    .section-title { margin: 20px 0 12px; padding-bottom: 8px; }
+    .section-title .num { width: 28px; height: 28px; font-size: 14px; }
+    .section-title .txt { font-size: 16px; }
+    .section-title .cnt { font-size: 11px; }
+
+    /* 题目卡片 */
+    .question { padding: 14px 12px; margin-bottom: 10px; border-radius: 10px; }
+    .q-text { font-size: 15px; line-height: 1.5; }
+    .q-num { width: 30px; height: 30px; font-size: 13px; }
+    .q-type { font-size: 10px; padding: 2px 6px; }
+
+    /* 选项 - 大触摸区域 */
+    .options { gap: 8px; }
+    .option {
+      font-size: 15px;
+      padding: 14px 12px;
+      border-radius: 10px;
+      min-height: 48px;
+      -webkit-tap-highlight-color: rgba(232,119,34,0.1);
+      transition: background 0.1s;
+    }
+    .option:active { background: var(--orange-light); transform: scale(0.98); }
+    .option .mark { width: 28px; height: 28px; font-size: 14px; flex-shrink: 0; }
+    .option.selected .mark { font-size: 14px; }
+
+    /* 反馈 */
+    .feedback { font-size: 13px; padding: 8px 12px; margin-top: 8px; }
+
+    /* 分数面板 */
+    .score-panel { padding: 20px 16px; margin: 16px 0; }
+    .score-big { font-size: 56px; }
+
+    /* 按钮 */
+    .btn { padding: 14px 28px; font-size: 16px; border-radius: 10px; width: 100%; }
+    .btn-row { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+    .btn-submit { order: 1; }
+    .btn-reset { order: 2; margin-left: 0 !important; }
+    .btn-copy { padding: 12px 20px; font-size: 14px; width: auto; }
+
+    /* 底部留空给固定按钮 */
+    .footer { padding: 12px; font-size: 11px; margin-bottom: 20px; }
+
+    /* 微信内置浏览器优化 */
+    @supports (-webkit-overflow-scrolling: touch) {
+      body { -webkit-overflow-scrolling: touch; }
+      .option { cursor: pointer; }
+    }
+  }
+
+  /* 超小屏（320-375px）进一步优化 */
+  @media (max-width: 400px) {
+    .header h1 { font-size: 18px; }
+    .q-text { font-size: 14px; }
+    .option { font-size: 14px; padding: 12px 10px; }
+    .option .mark { width: 26px; height: 26px; font-size: 13px; }
+    .info-bar { font-size: 11px; gap: 4px; }
+    .btn { font-size: 15px; padding: 12px 20px; }
+  }
+
+  @media print {
+    body { background: white; color: black; font-size: 13px; }
+    .header { background: white !important; color: black !important; padding: 10px 0; border-bottom: 2px solid black; }
+    .header h1 { font-size: 20px; color: black; }
+    .header .subtitle, .header .badge { color: #555; }
+    .header::after { display: none; }
+    .info-bar { box-shadow: none; border: 1px solid #CCC; }
+    .btn-row { display: none; }
+    .footer { display: none; }
+    .question { box-shadow: none; border: 1px solid #DDD; break-inside: avoid; margin-bottom: 8px; padding: 12px 16px; }
+    .question.correct-q { background: #fff; border-left-color: black; }
+    .question.wrong-q { background: #fff; border-left-color: black; }
+    .section-title { border-bottom-color: black; }
+    .section-title .num { background: black; }
+    .feedback.show { display: block !important; font-size: 12px; }
+    .option { font-size: 13px; }
+    .score-panel { box-shadow: none; border: 2px solid black; }
+    .score-panel.show { display: block !important; }
+    @page { margin: 1.5cm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🚜 叉车司机作业标准 — 考核问卷</h1>
+  <div class="subtitle">基于《叉车司机作业标准（2026.02.28）》编制</div>
+  <div class="badge">安全考核 · 持证上岗</div>
+</div>
+
+<div class="container">
+
+  <!-- Info bar -->
+  <div class="info-bar">
+    <span class="icon">📋</span> 共 <b>20</b> 题
+    <span class="icon">🔵</span> 单选 <b>10</b> 题
+    <span class="icon">🟣</span> 多选 <b>5</b> 题
+    <span class="icon">🟠</span> 判断 <b>5</b> 题
+    <span class="icon">⏱️</span> 满分 <b>100</b> 分
+    <span class="icon">✅</span> 及格线 <b>80</b> 分
+  </div>
+
+  <!-- ==================== 单选题 ==================== -->
+  <div class="section-title">
+    <div class="num">1</div>
+    <div class="txt">单选题</div>
+    <div class="cnt">每题 5 分 · 共 50 分</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="question" id="q1">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">叉车司机上岗必须满足的着装要求是？</div>
+    </div>
+    <div class="options" data-q="1" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">A</span>驾驶证、穿工作服、戴手套</div>
+      <div class="option" data-val="B"><span class="mark">B</span>持证上岗、穿反光背心、戴安全帽</div>
+      <div class="option" data-val="C"><span class="mark">C</span>持证上岗、可穿短裤、戴安全帽</div>
+      <div class="option" data-val="D"><span class="mark">D</span>只需穿工作服即可，无需持证</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question" id="q2">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">每日上班前，叉车司机的正确做法是？</div>
+    </div>
+    <div class="options" data-q="2" data-type="single" data-answer="A">
+      <div class="option" data-val="A"><span class="mark">A</span>点检叉车、确认性能完好、登记维保检查表后方可作业</div>
+      <div class="option" data-val="B"><span class="mark">B</span>直接启动叉车开始作业</div>
+      <div class="option" data-val="C"><span class="mark">C</span>只需检查油量即可</div>
+      <div class="option" data-val="D"><span class="mark">D</span>每周点检一次即可</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question" id="q3">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">下班后，电动叉车电量低于多少时需在指定区域充电？</div>
+    </div>
+    <div class="options" data-q="3" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">A</span>≤30%</div>
+      <div class="option" data-val="B"><span class="mark">B</span>≤40%</div>
+      <div class="option" data-val="C"><span class="mark">C</span>≤50%</div>
+      <div class="option" data-val="D"><span class="mark">D</span>≤20%</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question" id="q4">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">17.5 米货车应使用几叉进行叉运作业？</div>
+    </div>
+    <div class="options" data-q="4" data-type="single" data-answer="D">
+      <div class="option" data-val="A"><span class="mark">A</span>二叉</div>
+      <div class="option" data-val="B"><span class="mark">B</span>二叉半</div>
+      <div class="option" data-val="C"><span class="mark">C</span>三叉</div>
+      <div class="option" data-val="D"><span class="mark">D</span>四叉</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question" id="q5">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">仓库内吸烟或酒后驾驶叉车，扣绩效多少元/次？</div>
+    </div>
+    <div class="options" data-q="5" data-type="single" data-answer="C">
+      <div class="option" data-val="A"><span class="mark">A</span>200 元</div>
+      <div class="option" data-val="B"><span class="mark">B</span>500 元</div>
+      <div class="option" data-val="C"><span class="mark">C</span>1000 元</div>
+      <div class="option" data-val="D"><span class="mark">D</span>2000 元</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question" id="q6">
+    <div class="q-header">
+      <div class="q-num">6</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">叉车行驶速度限制为？</div>
+    </div>
+    <div class="options" data-q="6" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">A</span>超10KM/H（弯道超5KM/H）</div>
+      <div class="option" data-val="B"><span class="mark">B</span>超8KM/H（弯道超3KM/H）</div>
+      <div class="option" data-val="C"><span class="mark">C</span>超15KM/H（弯道超8KM/H）</div>
+      <div class="option" data-val="D"><span class="mark">D</span>超5KM/H（弯道超2KM/H）</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question" id="q7">
+    <div class="q-header">
+      <div class="q-num">7</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">托盘离地超过多少厘米属于违规操作？</div>
+    </div>
+    <div class="options" data-q="7" data-type="single" data-answer="C">
+      <div class="option" data-val="A"><span class="mark">A</span>20CM</div>
+      <div class="option" data-val="B"><span class="mark">B</span>50CM</div>
+      <div class="option" data-val="C"><span class="mark">C</span>30CM</div>
+      <div class="option" data-val="D"><span class="mark">D</span>40CM</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question" id="q8">
+    <div class="q-header">
+      <div class="q-num">8</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">货物上架摆放规范中，托盘应放在货架的什么位置？</div>
+    </div>
+    <div class="options" data-q="8" data-type="single" data-answer="C">
+      <div class="option" data-val="A"><span class="mark">A</span>靠左放置</div>
+      <div class="option" data-val="B"><span class="mark">B</span>靠右放置</div>
+      <div class="option" data-val="C"><span class="mark">C</span>正中位置（前后各10cm）</div>
+      <div class="option" data-val="D"><span class="mark">D</span>任意位置均可</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question" id="q9">
+    <div class="q-header">
+      <div class="q-num">9</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">装车完成后，出库单应如何处理？</div>
+    </div>
+    <div class="options" data-q="9" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">A</span>叉车司机自行保管</div>
+      <div class="option" data-val="B"><span class="mark">B</span>一车一单交予制单员</div>
+      <div class="option" data-val="C"><span class="mark">C</span>放在货物上随车带走</div>
+      <div class="option" data-val="D"><span class="mark">D</span>直接丢弃</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question" id="q10">
+    <div class="q-header">
+      <div class="q-num">10</div>
+      <div class="q-type type-single">单选</div>
+      <div class="q-text">1000 元考核内处罚，月累计几次会被劝退？</div>
+    </div>
+    <div class="options" data-q="10" data-type="single" data-answer="A">
+      <div class="option" data-val="A"><span class="mark">A</span>2 次</div>
+      <div class="option" data-val="B"><span class="mark">B</span>1 次</div>
+      <div class="option" data-val="C"><span class="mark">C</span>3 次</div>
+      <div class="option" data-val="D"><span class="mark">D</span>4 次</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- ==================== 多选题 ==================== -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <div class="txt">多选题</div>
+    <div class="cnt">每题 6 分 · 共 30 分（少选得 3 分，错选不得分）</div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question" id="q11">
+    <div class="q-header">
+      <div class="q-num">11</div>
+      <div class="q-type type-multi">多选</div>
+      <div class="q-text">以下哪些属于叉车司机必须遵守的基础作业规范？</div>
+    </div>
+    <div class="options" data-q="11" data-type="multi" data-answer="A,B,D,E">
+      <div class="option multi-opt" data-val="A"><span class="mark">A</span>持证上岗，穿反光背心、戴安全帽</div>
+      <div class="option multi-opt" data-val="B"><span class="mark">B</span>每日上班前点检叉车并登记维保检查表</div>
+      <div class="option multi-opt" data-val="C"><span class="mark">C</span>下班后叉车可任意停放</div>
+      <div class="option multi-opt" data-val="D"><span class="mark">D</span>当日工作当日毕</div>
+      <div class="option multi-opt" data-val="E"><span class="mark">E</span>下班前做好责任区6S</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question" id="q12">
+    <div class="q-header">
+      <div class="q-num">12</div>
+      <div class="q-type type-multi">多选</div>
+      <div class="q-text">以下哪些违规行为会被扣绩效 1000 元/次？</div>
+    </div>
+    <div class="options" data-q="12" data-type="multi" data-answer="A,C,D,E">
+      <div class="option multi-opt" data-val="A"><span class="mark">A</span>仓库内吸烟</div>
+      <div class="option multi-opt" data-val="B"><span class="mark">B</span>穿短裤上岗</div>
+      <div class="option multi-opt" data-val="C"><span class="mark">C</span>叉车载人或违规登高</div>
+      <div class="option multi-opt" data-val="D"><span class="mark">D</span>酒后驾驶叉车</div>
+      <div class="option multi-opt" data-val="E"><span class="mark">E</span>擅自借出/赠送公司物资</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question" id="q13">
+    <div class="q-header">
+      <div class="q-num">13</div>
+      <div class="q-type type-multi">多选</div>
+      <div class="q-text">货物入库规范中，以下哪些操作是正确的？</div>
+    </div>
+    <div class="options" data-q="13" data-type="multi" data-answer="A,C,D,E">
+      <div class="option multi-opt" data-val="A"><span class="mark">A</span>卸货前检查货物外观，异常立即上报</div>
+      <div class="option multi-opt" data-val="B"><span class="mark">B</span>收货验收后直接上架，无需PDA扫码</div>
+      <div class="option multi-opt" data-val="C"><span class="mark">C</span>木托盘放一层，塑胶托盘放2层以上</div>
+      <div class="option multi-opt" data-val="D"><span class="mark">D</span>1-3层可直接上架，4层以上等高位叉车</div>
+      <div class="option multi-opt" data-val="E"><span class="mark">E</span>货物、标签、托盘号均需朝向通道</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question" id="q14">
+    <div class="q-header">
+      <div class="q-num">14</div>
+      <div class="q-type type-multi">多选</div>
+      <div class="q-text">以下哪些属于叉车操作违规行为？</div>
+    </div>
+    <div class="options" data-q="14" data-type="multi" data-answer="B,C,D,E">
+      <div class="option multi-opt" data-val="A"><span class="mark">A</span>下坡时倒车行驶</div>
+      <div class="option multi-opt" data-val="B"><span class="mark">B</span>在一二层使用高位叉车</div>
+      <div class="option multi-opt" data-val="C"><span class="mark">C</span>多托货物以推行形式移动</div>
+      <div class="option multi-opt" data-val="D"><span class="mark">D</span>车速超过8KM/H</div>
+      <div class="option multi-opt" data-val="E"><span class="mark">E</span>托盘离地超过30CM</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question" id="q15">
+    <div class="q-header">
+      <div class="q-num">15</div>
+      <div class="q-type type-multi">多选</div>
+      <div class="q-text">关于货物出入库违规处罚，以下哪些说法是正确的？</div>
+    </div>
+    <div class="options" data-q="15" data-type="multi" data-answer="A,B,C,E">
+      <div class="option multi-opt" data-val="A"><span class="mark">A</span>客户投诉情节一般且可妥善处理：扣绩效300元</div>
+      <div class="option multi-opt" data-val="B"><span class="mark">B</span>导致客户停线：扣绩效1000元并承担全部经济责任</div>
+      <div class="option multi-opt" data-val="C"><span class="mark">C</span>内部检举未造成损失：责任人扣200元，检举人奖200元</div>
+      <div class="option multi-opt" data-val="D"><span class="mark">D</span>员工任何操作失误都必须经济处罚</div>
+      <div class="option multi-opt" data-val="E"><span class="mark">E</span>员工自行发现并及时纠正、未造成影响：仅通报批评不处罚</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- ==================== 判断题 ==================== -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <div class="txt">判断题</div>
+    <div class="cnt">每题 4 分 · 共 20 分</div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="question" id="q16">
+    <div class="q-header">
+      <div class="q-num">16</div>
+      <div class="q-type type-judge">判断</div>
+      <div class="q-text">叉车司机可以穿露趾鞋上岗作业。</div>
+    </div>
+    <div class="options" data-q="16" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">✓</span>正确</div>
+      <div class="option" data-val="B"><span class="mark">✗</span>错误</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="question" id="q17">
+    <div class="q-header">
+      <div class="q-num">17</div>
+      <div class="q-type type-judge">判断</div>
+      <div class="q-text">每日下班前叉车司机须做好责任区6S，做到工完场净。</div>
+    </div>
+    <div class="options" data-q="17" data-type="single" data-answer="A">
+      <div class="option" data-val="A"><span class="mark">✓</span>正确</div>
+      <div class="option" data-val="B"><span class="mark">✗</span>错误</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="question" id="q18">
+    <div class="q-header">
+      <div class="q-num">18</div>
+      <div class="q-type type-judge">判断</div>
+      <div class="q-text">下坡时叉车应正向（车头朝前）行驶以确保安全。</div>
+    </div>
+    <div class="options" data-q="18" data-type="single" data-answer="B">
+      <div class="option" data-val="A"><span class="mark">✓</span>正确</div>
+      <div class="option" data-val="B"><span class="mark">✗</span>错误</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="question" id="q19">
+    <div class="q-header">
+      <div class="q-num">19</div>
+      <div class="q-type type-judge">判断</div>
+      <div class="q-text">单托500kg以下的货物可以堆叠4层以上存放。</div>
+    </div>
+    <div class="options" data-q="19" data-type="single" data-answer="A">
+      <div class="option" data-val="A"><span class="mark">✓</span>正确</div>
+      <div class="option" data-val="B"><span class="mark">✗</span>错误</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="question" id="q20">
+    <div class="q-header">
+      <div class="q-num">20</div>
+      <div class="q-type type-judge">判断</div>
+      <div class="q-text">四级连带责任制度涉及：现场主管→副总监→安全总监→副总。</div>
+    </div>
+    <div class="options" data-q="20" data-type="single" data-answer="A">
+      <div class="option" data-val="A"><span class="mark">✓</span>正确</div>
+      <div class="option" data-val="B"><span class="mark">✗</span>错误</div>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <!-- ==================== Score Panel ==================== -->
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreNum">--</div>
+    <div class="score-detail" id="scoreDetail"></div>
+    <div class="score-bar-bg"><div class="score-bar-fg" id="scoreBar"></div></div>
+    <div id="scoreMsg" style="font-size:18px;font-weight:700;margin-top:8px;"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-copy" onclick="submitToAdmin()">📤 提交成绩到管理员</button>
+      <button class="btn-copy" onclick="copyResult()" style="background:#555;">📋 复制成绩单</button>
+    </div>
+    <div id="submitStatus" style="display:none;margin-top:10px;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;"></div>
+    <div id="copyToast" style="display:none;margin-top:10px;color:var(--green);font-weight:600;font-size:14px;"></div>
+    <div style="margin-top:16px;font-size:12px;color:#999;">
+      💡 点「提交成绩到管理员」→ 输入姓名 → 成绩单秒到管理员微信 | 备选：「复制成绩单」发群
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="btn-row">
+    <button class="btn btn-submit" id="btnSubmit" onclick="submitQuiz()">📝 提交答卷</button>
+    <button class="btn btn-reset" id="btnReset" onclick="resetQuiz()">🔄 重新作答</button>
+  </div>
+
+</div>
+
+<div class="footer">
+  叉车司机作业标准考核问卷 · 安全第一 预防为主
+</div>
+
+<script>
+// ===== 选项点击逻辑 =====
+document.querySelectorAll('.option').forEach(opt => {
+  opt.addEventListener('click', function() {
+    const optionsDiv = this.parentElement;
+    const type = optionsDiv.dataset.type;
+    const qDiv = optionsDiv.closest('.question');
+
+    if (type === 'single' || type === undefined) {
+      // 单选/判断：取消旧选择，选中当前
+      optionsDiv.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+    } else if (type === 'multi') {
+      // 多选：切换选择
+      this.classList.toggle('selected');
+    }
+
+    qDiv.classList.add('answered');
+  });
+});
+
+// ===== 提交 =====
+function submitQuiz() {
+  let totalScore = 0;
+  const maxScore = 100;
+  let correctCount = 0;
+  const totalQuestions = 20;
+  const results = [];
+
+  // 处理所有题目
+  document.querySelectorAll('.options').forEach(optionsDiv => {
+    const q = parseInt(optionsDiv.dataset.q);
+    const type = optionsDiv.dataset.type;
+    const answerStr = optionsDiv.dataset.answer;
+    const qDiv = optionsDiv.closest('.question');
+    const feedback = qDiv.querySelector('.feedback');
+
+    // 获取用户选择
+    const selected = Array.from(optionsDiv.querySelectorAll('.option.selected')).map(o => o.dataset.val);
+    const userAnswer = selected.sort().join(',');
+
+    let isCorrect = false;
+    let scoreForQ = 0;
+    let maxScoreForQ = 0;
+
+    if (q <= 10) { // 单选 5分
+      maxScoreForQ = 5;
+      isCorrect = (userAnswer === answerStr);
+      scoreForQ = isCorrect ? 5 : 0;
+    } else if (q <= 15) { // 多选 6分
+      maxScoreForQ = 6;
+      const correctSet = new Set(answerStr.split(','));
+      const userSet = new Set(selected);
+      const allCorrect = selected.every(v => correctSet.has(v));
+      const hasWrong = selected.some(v => !correctSet.has(v));
+
+      if (allCorrect && selected.length === correctSet.size) {
+        // 完全正确
+        isCorrect = true;
+        scoreForQ = 6;
+      } else if (allCorrect && selected.length < correctSet.size) {
+        // 少选
+        isCorrect = false;
+        scoreForQ = 3;
+      } else {
+        // 有错选或未选
+        isCorrect = false;
+        scoreForQ = 0;
+      }
+    } else { // 判断 4分
+      maxScoreForQ = 4;
+      isCorrect = (userAnswer === answerStr);
+      scoreForQ = isCorrect ? 4 : 0;
+    }
+
+    totalScore += scoreForQ;
+    if (isCorrect) correctCount++;
+
+    // 显示反馈
+    const correctSet = new Set(answerStr.split(','));
+    optionsDiv.querySelectorAll('.option').forEach(opt => {
+      if (correctSet.has(opt.dataset.val)) {
+        opt.classList.add('correct');
+      }
+      if (opt.classList.contains('selected') && !correctSet.has(opt.dataset.val)) {
+        opt.classList.add('wrong');
+      }
+    });
+
+    if (isCorrect || scoreForQ > 0 && scoreForQ === maxScoreForQ) {
+      feedback.className = 'feedback correct-fb show';
+      feedback.textContent = `✅ 正确！+${scoreForQ} 分`;
+    } else if (scoreForQ > 0) {
+      feedback.className = 'feedback correct-fb show';
+      feedback.textContent = `⚠️ 少选，得 ${scoreForQ}/${maxScoreForQ} 分。正确答案：${answerStr.replace(/,/g, '、')}`;
+    } else {
+      feedback.className = 'feedback wrong-fb show';
+      feedback.textContent = `❌ 错误。正确答案：${answerStr.replace(/,/g, '、')}`;
+    }
+
+    qDiv.classList.add(isCorrect ? 'correct-q' : 'wrong-q');
+  });
+
+  // 显示分数面板
+  const panel = document.getElementById('scorePanel');
+  panel.classList.add('show');
+
+  const scoreEl = document.getElementById('scoreNum');
+  scoreEl.textContent = totalScore;
+  scoreEl.className = 'score-big ' + (totalScore >= 80 ? 'score-pass' : 'score-fail');
+
+  document.getElementById('scoreDetail').textContent =
+    `答对 ${correctCount}/${totalQuestions} 题 · 得分 ${totalScore}/${maxScore} 分`;
+
+  const bar = document.getElementById('scoreBar');
+  bar.style.width = (totalScore / maxScore * 100) + '%';
+  bar.style.background = totalScore >= 80 ? 'var(--green)' :
+                         totalScore >= 60 ? 'var(--orange)' : 'var(--red)';
+
+  const msg = document.getElementById('scoreMsg');
+  if (totalScore >= 90) {
+    msg.textContent = '🏆 优秀！对作业标准掌握非常扎实！';
+    msg.style.color = 'var(--green)';
+  } else if (totalScore >= 80) {
+    msg.textContent = '✅ 合格！继续巩固薄弱知识点。';
+    msg.style.color = 'var(--green)';
+  } else if (totalScore >= 60) {
+    msg.textContent = '⚠️ 需加强学习，建议重读《叉车司机作业标准》。';
+    msg.style.color = 'var(--orange)';
+  } else {
+    msg.textContent = '❌ 不合格！请重新学习标准后补考。';
+    msg.style.color = 'var(--red)';
+  }
+
+  // 禁用选项
+  document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
+  document.getElementById('btnSubmit').disabled = true;
+
+  // 保存本次结果到本地
+  saveResultLocally(totalScore, correctCount);
+
+  // 滚动到分数
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== 复制成绩单 =====
+function copyResult() {
+  const name = prompt('请输入你的姓名（用于成绩单标识）：', '');
+  const displayName = name ? name : '未署名';
+  const report = buildReport(displayName);
+
+  navigator.clipboard.writeText(report).then(() => {
+    const toast = document.getElementById('copyToast');
+    toast.style.display = 'block';
+    toast.textContent = '✅ 已复制！粘贴到微信发送即可';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+  }).catch(() => {
+    const toast = document.getElementById('copyToast');
+    toast.style.display = 'block';
+    toast.innerHTML = `⚠️ 自动复制失败，请长按选中下方文字手动复制：<br><textarea style="width:100%;height:120px;margin-top:8px;font-size:13px;border-radius:8px;padding:8px;" onclick="this.select()">${report.replace(/\n/g,'&#10;')}</textarea>`;
+  });
+}
+
+// ===== 构建成绩单文本 =====
+function buildReport(displayName) {
+  const score = document.getElementById('scoreNum').textContent;
+  const detail = document.getElementById('scoreDetail').textContent;
+  const msg = document.getElementById('scoreMsg').textContent;
+  const now = new Date();
+  const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  let report = `【叉车司机作业标准考核成绩单】\n`;
+  report += `═══════════════════\n`;
+  report += `姓名：${displayName}\n`;
+  report += `时间：${time}\n`;
+  report += `得分：${score} / 100 分\n`;
+  report += `详情：${detail}\n`;
+  report += `评级：${msg}\n`;
+  report += `═══════════════════\n`;
+  report += `问卷来源：叉车司机作业标准（2026.02.28）`;
+  return report;
+}
+
+// ===== 提交成绩到管理员（Server酱 → 微信）=====
+const SERVER_KEY = 'SCT368231TmDUXQtGu9QYGI2eW63Q55tON';
+
+async function submitToAdmin() {
+  const statusDiv = document.getElementById('submitStatus');
+  if (document.getElementById('btnSubmit').disabled === false) {
+    alert('请先完成答题并点击「提交答卷」后再提交成绩');
+    return;
+  }
+  const name = prompt('请输入你的姓名（必填）：', '');
+  if (!name || !name.trim()) {
+    alert('请填写姓名后提交');
+    return;
+  }
+
+  statusDiv.style.display = 'block';
+  statusDiv.style.background = '#FFF3E0';
+  statusDiv.style.color = '#E65100';
+  statusDiv.textContent = '⏳ 正在提交到管理员微信...';
+  statusDiv.scrollIntoView({ behavior: 'smooth' });
+
+  const report = buildReport(name.trim());
+  const title = `叉车考核：${name.trim()} ${document.getElementById('scoreNum').textContent}分`;
+
+  // Server酱：先试 POST（可能有 CORS），失败则降级为 GET + no-cors
+  async function tryPost() {
+    const resp = await fetch(`https://sctapi.ftqq.com/${SERVER_KEY}.send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: title, desp: report })
+    });
+    const result = await resp.json();
+    if (result.code !== 0) throw new Error(result.message || 'fail');
+  }
+
+  async function tryGet() {
+    const url = `https://sctapi.ftqq.com/${SERVER_KEY}.send?title=${encodeURIComponent(title)}&desp=${encodeURIComponent(report)}`;
+    const img = new Image();
+    img.src = url;
+    await new Promise((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error('网络错误'));
+      setTimeout(() => reject(new Error('超时')), 10000);
+    });
+  }
+
+  let success = false;
+  try { await tryPost(); success = true; } catch(e1) {
+    try { await tryGet(); success = true; } catch(e2) {
+      success = false;
+    }
+  }
+
+  if (success) {
+    statusDiv.style.background = '#E8F5E9';
+    statusDiv.style.color = '#2E7D32';
+    statusDiv.textContent = '✅ 提交成功！管理员微信已收到你的成绩单';
+    saveResultLocally(parseInt(document.getElementById('scoreNum').textContent), 0, name.trim());
+  } else {
+    statusDiv.style.background = '#FFEBEE';
+    statusDiv.style.color = '#C62828';
+    statusDiv.innerHTML = `❌ 提交失败<br><span style="font-weight:400;font-size:13px;">请改用「📋 复制成绩单」发送到微信群</span>`;
+  }
+}
+
+// ===== 本地存储（本机汇总查看）=====
+function saveResultLocally(score, correct, name) {
+  try {
+    const records = JSON.parse(localStorage.getItem('forklift_quiz_results') || '[]');
+    records.push({
+      name: name || '未署名',
+      score: score,
+      correct: correct,
+      time: new Date().toISOString()
+    });
+    // 只保留最近 50 条
+    if (records.length > 50) records.splice(0, records.length - 50);
+    localStorage.setItem('forklift_quiz_results', JSON.stringify(records));
+  } catch(e) {}
+}
+
+// 页面加载时显示本机历史记录（如果有）
+(function() {
+  try {
+    const records = JSON.parse(localStorage.getItem('forklift_quiz_results') || '[]');
+    if (records.length > 0) {
+      const last = records[records.length - 1];
+      const infoBar = document.querySelector('.info-bar');
+      if (infoBar && records.length >= 3) {
+        const avg = Math.round(records.reduce((s,r) => s + r.score, 0) / records.length);
+        const span = document.createElement('span');
+        span.innerHTML = `📊 本机累计 ${records.length} 次 · 均分 ${avg}`;
+        span.style.cssText = 'color:var(--orange);font-weight:600;margin-left:auto;';
+        infoBar.appendChild(span);
+      }
+    }
+  } catch(e) {}
+})();
+
+// ===== 重置 =====
+function resetQuiz() {
+  document.querySelectorAll('.option').forEach(o => {
+    o.classList.remove('selected', 'correct', 'wrong');
+    o.style.pointerEvents = '';
+  });
+  document.querySelectorAll('.question').forEach(q => {
+    q.classList.remove('answered', 'correct-q', 'wrong-q');
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.textContent = '';
+  });
+  document.getElementById('scorePanel').classList.remove('show');
+  document.getElementById('btnSubmit').disabled = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
