@@ -72,7 +72,7 @@ def login_page():
 @app.route('/app')
 @auth_required
 def app_page():
-    return render_template('app_v3.html')
+    return render_template('app_v2.html')
 
 # ===== API 路由 =====
 @app.route('/api/auth/login', methods=['POST'])
