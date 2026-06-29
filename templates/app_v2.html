@@ -2,469 +2,397 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>企业培训考试</title>
+<title>企业培训考试系统</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <style>
-:root{--pri:#1989fa;--succ:#07c160;--danger:#ee0a24;--warn:#ff976a;--bg:#f7f8fa;--card:#fff;--text:#323233;--sub:#969799;--bor:#ebedf0;--rad:10px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
-/* Login */
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#0a0e1a,#1a2a4a)}
-.login-card{width:100%;max-width:360px;background:var(--card);border-radius:16px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-card h2{text-align:center;font-size:22px;margin-bottom:4px}
-.login-card .sub{text-align:center;color:var(--sub);font-size:13px;margin-bottom:24px}
-.login-card input{width:100%;padding:12px 14px;margin-bottom:12px;border:1.5px solid var(--bor);border-radius:var(--rad);font-size:15px;outline:none;transition:.2s}
-.login-card input:focus{border-color:var(--pri)}
-.login-card button{width:100%;padding:12px;background:var(--pri);color:#fff;border:none;border-radius:var(--rad);font-size:16px;font-weight:600;cursor:pointer;transition:.2s}
-.login-card button:active{opacity:.8}
-.login-card .err{background:#fff0f0;color:var(--danger);padding:10px;border-radius:8px;font-size:13px;margin-bottom:12px;text-align:center;display:none}
-.login-card .hint{margin-top:16px;font-size:12px;color:var(--sub);text-align:center;line-height:1.8}
-/* Tab bar */
-.tabbar{position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--card);display:flex;border-top:1px solid var(--bor);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.tabbar .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--sub);cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent}
-.tabbar .tab.active{color:var(--pri)}
-.tabbar .tab .icon{font-size:22px;margin-bottom:2px}
-/* Nav */
-.navbar{position:sticky;top:0;z-index:99;background:var(--card);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bor)}
-.navbar h1{font-size:18px;font-weight:600}
-.navbar .user{font-size:13px;color:var(--sub)}
-/* Page */
-.page{display:none;padding:16px 12px;padding-bottom:80px}
-.page.active{display:block}
-/* Card */
-.card{background:var(--card);border-radius:var(--rad);padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.card h3{font-size:14px;color:var(--sub);margin-bottom:8px;font-weight:400}
-.card .big{font-size:32px;font-weight:800}
-/* Stat grid */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.stat-card{background:var(--card);border-radius:var(--rad);padding:14px;text-align:center}
-.stat-card .num{font-size:28px;font-weight:800;line-height:1.2}
-.stat-card .label{font-size:12px;color:var(--sub);margin-top:2px}
-/* Question */
-.q-block{background:var(--card);border-radius:var(--rad);padding:16px;margin-bottom:12px}
-.q-block .q-num{display:inline-block;background:var(--pri);color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;margin-right:8px}
-.q-block .q-text{font-size:15px;margin:8px 0;line-height:1.5}
-.q-block .opt{display:flex;align-items:center;gap:10px;padding:12px;margin:6px 0;border:1.5px solid var(--bor);border-radius:8px;font-size:14px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent}
-.q-block .opt:active{background:#f0f5ff}
-.q-block .opt.sel{border-color:var(--pri);background:#f0f5ff}
-.q-block .opt .mark{min-width:26px;height:26px;border:2px solid #ccc;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
-.q-block .opt.sel .mark{border-color:var(--pri);background:var(--pri);color:#fff}
-/* Result */
-.result-header{text-align:center;padding:24px;background:var(--card);border-radius:var(--rad);margin-bottom:16px}
-.result-score{font-size:56px;font-weight:800}
-.result-bar{height:8px;background:#eee;border-radius:4px;margin:16px auto;max-width:300px;overflow:hidden}
-.result-bar-inner{height:100%;border-radius:4px;transition:width .6s}
-.analysis{padding:10px 12px;margin-top:8px;border-radius:8px;font-size:13px}
-.analysis.ok{background:#e8f8ee;color:var(--succ);border-left:3px solid var(--succ)}
-.analysis.err{background:#fff0f0;color:var(--danger);border-left:3px solid var(--danger)}
-.opt.correct{border-color:var(--succ);background:#e8f8ee}
-.opt.wrong{border-color:var(--danger);background:#fff0f0}
-/* Table */
-.tbl{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--rad);overflow:hidden;font-size:13px}
-.tbl th{background:#f5f6fa;padding:10px 8px;font-weight:600;text-align:left;font-size:12px;color:var(--sub)}
-.tbl td{padding:10px 8px;border-bottom:1px solid var(--bor)}
-.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
-.badge-pass{background:#e8f8ee;color:var(--succ)}
-.badge-fail{background:#fff0f0;color:var(--danger)}
-.badge-warn{background:#fff7f0;color:#ff6b00}
-/* Buttons */
-.btn{display:inline-block;padding:10px 24px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:.15s;text-align:center}
-.btn-pri{background:var(--pri);color:#fff}
-.btn-succ{background:var(--succ);color:#fff}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-block{display:block;width:100%}
-.btn:active{opacity:.8}
-.btn-sm{padding:6px 14px;font-size:13px}
-/* Filter bar */
-.filter-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.filter-bar .chip{padding:6px 14px;border-radius:20px;border:1px solid var(--bor);font-size:13px;white-space:nowrap;cursor:pointer;background:var(--card)}
-.filter-bar .chip.active{background:var(--pri);color:#fff;border-color:var(--pri)}
-/* Modal */
-.modal-mask{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center}
-.modal-mask.show{display:flex}
-.modal-box{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:80vh;overflow-y:auto;padding:20px}
-.modal-box h3{font-size:18px;margin-bottom:16px;text-align:center}
-.modal-box input,.modal-box select,.modal-box textarea{width:100%;padding:10px;margin-bottom:10px;border:1.5px solid var(--bor);border-radius:8px;font-size:14px;font-family:inherit}
-.modal-box textarea{min-height:60px;resize:vertical}
-.empty{text-align:center;color:var(--sub);padding:40px;font-size:14px}
+:root{--bs-primary:#2563eb;--bs-success:#10b981;--bs-danger:#ef4444;--bs-warning:#f59e0b}
+body{background:#f1f5f9;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.bg-login{background:linear-gradient(135deg,#0f172a,#1e293b,#334155)}
+.navbar-brand{font-weight:700;font-size:1.1rem}
+.sidebar{min-height:100vh;background:#fff;border-right:1px solid #e2e8f0}
+.sidebar .nav-link{color:#475569;padding:.75rem 1.25rem;border-radius:8px;margin:2px 8px;font-size:14px}
+.sidebar .nav-link:hover,.sidebar .nav-link.active{background:#eff6ff;color:var(--bs-primary);font-weight:600}
+.stat-card{background:#fff;border-radius:12px;padding:1.25rem;border:1px solid #e2e8f0;transition:.2s}
+.stat-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.stat-card .num{font-size:2rem;font-weight:800;line-height:1.2}
+.stat-card .label{font-size:.8rem;color:#94a3b8;margin-top:2px}
+.card-q{border-left:4px solid #e2e8f0;transition:.2s}
+.card-q.answered{border-left-color:var(--bs-primary)}
+.card-q .list-group-item{cursor:pointer;transition:.15s;border-radius:8px;margin:4px 0;border:1.5px solid #e2e8f0}
+.card-q .list-group-item:hover{border-color:var(--bs-primary);background:#f8fafc}
+.card-q .list-group-item.selected{border-color:var(--bs-primary);background:#eff6ff;font-weight:600}
+.card-q .list-group-item.correct{border-color:var(--bs-success);background:#ecfdf5;color:var(--bs-success)}
+.card-q .list-group-item.wrong{border-color:var(--bs-danger);background:#fef2f2;color:var(--bs-danger)}
+.question-nav{position:sticky;top:0;z-index:10;background:#f1f5f9;padding:8px 0}
+.badge-type{font-size:.7rem;padding:3px 8px;border-radius:4px;font-weight:700}
+.result-bar{height:10px;border-radius:5px;background:#e2e8f0;overflow:hidden}
+.modal-content{border-radius:16px;border:none}
+.btn-soft{background:#eff6ff;color:var(--bs-primary);border:none}
+@media(max-width:768px){
+  .sidebar{display:none}
+  .stat-card .num{font-size:1.5rem}
+}
 </style>
 </head>
 <body>
 
-<!-- Login -->
-<div id="loginPage" class="login-page">
-  <div class="login-card">
-    <h2>📋 企业培训考试</h2>
-    <div class="sub">叉车司机作业标准考核系统</div>
-    <div class="err" id="loginErr">账号或密码错误</div>
-    <input id="loginUser" placeholder="账号" autocomplete="off">
-    <input id="loginPass" type="password" placeholder="密码">
-    <button onclick="doLogin()">登 录</button>
-    <div class="hint">
-      管理员 admin/admin123<br>主管 leader/123456<br>员工 zhuy/123456
+<!-- 登录页 -->
+<div id="loginPage" class="bg-login min-vh-100 d-flex align-items-center justify-content-center p-3">
+  <div class="bg-white rounded-4 p-4 p-md-5 shadow-lg" style="max-width:380px;width:100%">
+    <div class="text-center mb-4">
+      <div class="fs-1 mb-2">📋</div>
+      <h5 class="fw-bold">企业培训考试系统</h5>
+      <small class="text-muted">叉车司机作业标准考核</small>
     </div>
+    <div class="alert alert-danger py-2 d-none" id="loginErr">账号或密码错误</div>
+    <form onsubmit="doLogin(event)">
+      <div class="mb-3"><input id="loginUser" class="form-control form-control-lg rounded-3" placeholder="账号" required></div>
+      <div class="mb-3"><input id="loginPass" type="password" class="form-control form-control-lg rounded-3" placeholder="密码" required></div>
+      <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-bold">登 录</button>
+    </form>
+    <div class="text-center mt-3"><small class="text-muted">admin/admin123 · leader/123456 · zhuy/123456</small></div>
   </div>
 </div>
 
-<!-- App -->
-<div id="appPage" style="display:none">
-  <div class="navbar"><h1 id="pageTitle">数据看板</h1><span class="user" id="userInfo"></span></div>
-  
-  <!-- Dashboard -->
-  <div class="page active" id="page-dashboard">
-    <div class="stat-grid" id="statCards"></div>
-    <div class="card"><h3>📈 部门考核统计</h3><table class="tbl" id="deptStats"><tr><th>部门</th><th>次数</th><th>均分</th><th>及格率</th></tr></table></div>
-    <div class="card" style="margin-top:12px"><h3>🕐 最近考试</h3><table class="tbl" id="recentExams"><tr><th>姓名</th><th>分数</th><th>时间</th></tr></table></div>
-  </div>
-  
-  <!-- Exam -->
-  <div class="page" id="page-exam">
-    <div class="card"><p style="font-size:14px;color:var(--sub)">选择分类后开始随机抽题考试</p></div>
-    <div class="filter-bar" id="catFilter"></div>
-    <div id="examQuestions"></div>
-    <div style="text-align:center;padding:16px">
-      <button class="btn btn-pri btn-block" onclick="startExam()">🧪 开始考试</button>
-      <button class="btn btn-succ btn-block" onclick="submitExam()" id="submitBtn" style="display:none;margin-top:10px">📝 提交答卷</button>
+<!-- 主界面 -->
+<div id="appPage" class="d-none">
+  <div class="d-flex">
+    <!-- 侧边栏 -->
+    <div class="sidebar d-none d-md-block" style="width:220px">
+      <div class="p-3 border-bottom"><span class="fw-bold fs-5">📋 考核系统</span></div>
+      <nav class="nav flex-column mt-2">
+        <a class="nav-link active" onclick="switchTab('dashboard',this)"><i class="bi bi-speedometer2 me-2"></i>数据看板</a>
+        <a class="nav-link" onclick="switchTab('exam',this)"><i class="bi bi-pencil-square me-2"></i>在线考试</a>
+        <a class="nav-link" onclick="switchTab('history',this)"><i class="bi bi-clock-history me-2"></i>成绩记录</a>
+        <a class="nav-link d-none" id="navManage" onclick="switchTab('manage',this)"><i class="bi bi-gear me-2"></i>系统管理</a>
+        <hr class="mx-3 my-2">
+        <a class="nav-link text-danger" onclick="doLogout()"><i class="bi bi-box-arrow-right me-2"></i>退出登录</a>
+      </nav>
     </div>
-    <div id="examResult" class="result-header" style="display:none"></div>
+    
+    <!-- 移动端顶栏 -->
+    <nav class="navbar navbar-light bg-white border-bottom d-md-none fixed-top">
+      <div class="container-fluid">
+        <span class="navbar-brand" id="mobileTitle">数据看板</span>
+        <span class="text-muted small" id="mobileUser"></span>
+      </div>
+    </nav>
+    
+    <!-- 内容区 -->
+    <div class="flex-grow-1 p-3 p-md-4" style="min-height:100vh;margin-top:56px" id="mainContent">
+      
+      <!-- 看板 -->
+      <div id="tab-dashboard">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">📊 数据看板</h5>
+          <span class="text-muted small" id="userBadge"></span>
+        </div>
+        <div class="row g-3 mb-4" id="statCards"></div>
+        <div class="card border-0 shadow-sm mb-4"><div class="card-body" id="deptStats"><h6 class="fw-bold mb-3">🏢 部门统计</h6></div></div>
+        <div class="card border-0 shadow-sm"><div class="card-body" id="recentExams"><h6 class="fw-bold mb-3">🕐 最近考试</h6></div></div>
+      </div>
+
+      <!-- 考试 -->
+      <div id="tab-exam" class="d-none">
+        <h5 class="fw-bold mb-3">📝 在线考试</h5>
+        <div class="mb-3" id="catFilter"></div>
+        <div id="examContent">
+          <div class="text-center py-5 text-muted">选择一个分类后点击「开始考试」</div>
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-primary btn-lg px-5 rounded-pill fw-bold" onclick="startExam()">🧪 开始考试</button>
+          <button class="btn btn-success btn-lg px-5 rounded-pill fw-bold d-none" id="btnSubmit" onclick="submitExam()">📝 提交答卷</button>
+        </div>
+        <div id="examResult"></div>
+      </div>
+
+      <!-- 历史 -->
+      <div id="tab-history" class="d-none">
+        <h5 class="fw-bold mb-3">📋 成绩记录</h5>
+        <div class="card border-0 shadow-sm"><div class="card-body table-responsive" id="historyTable"><div class="text-center py-4 text-muted">暂无考试记录</div></div></div>
+      </div>
+
+      <!-- 管理 -->
+      <div id="tab-manage" class="d-none">
+        <h5 class="fw-bold mb-3">⚙️ 系统管理</h5>
+        <div class="d-flex gap-2 mb-3">
+          <button class="btn btn-primary btn-sm rounded-pill" onclick="showQModal()"><i class="bi bi-plus-lg"></i> 添加题目</button>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="showUModal()"><i class="bi bi-person-plus"></i> 添加用户</button>
+        </div>
+        <div id="manageContent"></div>
+      </div>
+    </div>
   </div>
   
-  <!-- History -->
-  <div class="page" id="page-history">
-    <table class="tbl" id="historyTable"><tr><th>时间</th><th>分数</th><th>操作</th></tr></table>
-    <div class="empty" id="historyEmpty">暂无考试记录</div>
-  </div>
-
-  <!-- Management (admin/manager) -->
-  <div class="page" id="page-manage">
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <button class="btn btn-pri btn-sm" onclick="showModal('qModal')">+ 添加题目</button>
-      <button class="btn btn-sm" style="background:#555;color:#fff" onclick="showModal('uModal')">+ 添加用户</button>
+  <!-- 移动端底部导航 -->
+  <nav class="navbar navbar-light bg-white border-top fixed-bottom d-md-none">
+    <div class="container-fluid justify-content-around">
+      <a class="nav-link text-center px-2 active" onclick="switchTab('dashboard',this)"><i class="bi bi-speedometer2 d-block fs-5"></i><small>看板</small></a>
+      <a class="nav-link text-center px-2" onclick="switchTab('exam',this)"><i class="bi bi-pencil-square d-block fs-5"></i><small>考试</small></a>
+      <a class="nav-link text-center px-2" onclick="switchTab('history',this)"><i class="bi bi-clock-history d-block fs-5"></i><small>记录</small></a>
+      <a class="nav-link text-center px-2 d-none" id="mbManage" onclick="switchTab('manage',this)"><i class="bi bi-gear d-block fs-5"></i><small>管理</small></a>
+      <a class="nav-link text-center px-2 text-danger" onclick="doLogout()"><i class="bi bi-box-arrow-right d-block fs-5"></i><small>退出</small></a>
     </div>
-    <div id="manageContent"></div>
-  </div>
-
-  <!-- Tab bar -->
-  <div class="tabbar" id="tabBar">
-    <div class="tab active" data-page="dashboard"><span class="icon">📊</span>看板</div>
-    <div class="tab" data-page="exam"><span class="icon">📝</span>考试</div>
-    <div class="tab" data-page="history"><span class="icon">📋</span>记录</div>
-    <div class="tab" data-page="manage" id="tabManage" style="display:none"><span class="icon">⚙️</span>管理</div>
-    <div class="tab" onclick="doLogout()"><span class="icon">🚪</span>退出</div>
-  </div>
-
-  <!-- Modals -->
-  <div class="modal-mask" id="qModal"><div class="modal-box">
-    <h3>添加题目</h3>
-    <select id="qCat"></select>
-    <select id="qType"><option value="single">单选题</option><option value="multi">多选题</option><option value="judge">判断题</option></select>
-    <textarea id="qContent" placeholder="题目内容"></textarea>
-    <textarea id="qOpts" placeholder='选项（JSON格式如 {"A":"...","B":"..."}）'></textarea>
-    <input id="qAnswer" placeholder="正确答案（如 B 或 ABD）">
-    <input id="qAnalysis" placeholder="解析">
-    <button class="btn btn-pri btn-block" onclick="addQuestion()">确认</button>
-    <button class="btn btn-block" onclick="hideModal('qModal')" style="margin-top:8px;background:#eee">取消</button>
-  </div></div>
-
-  <div class="modal-mask" id="uModal"><div class="modal-box">
-    <h3>添加用户</h3>
-    <input id="uName" placeholder="姓名">
-    <input id="uUsername" placeholder="登录账号">
-    <input id="uPassword" placeholder="密码" value="123456">
-    <select id="uRole"><option value="employee">员工</option><option value="manager">主管</option></select>
-    <input id="uDept" placeholder="部门">
-    <button class="btn btn-pri btn-block" onclick="addUser()">确认</button>
-    <button class="btn btn-block" onclick="hideModal('uModal')" style="margin-top:8px;background:#eee">取消</button>
-  </div></div>
-
-  <div class="modal-mask" id="detailModal"><div class="modal-box" id="detailContent"></div></div>
+  </nav>
 </div>
 
+<!-- 添加题目弹窗 -->
+<div class="modal fade" id="qModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content p-3">
+  <h5 class="fw-bold mb-3">➕ 添加题目</h5>
+  <select id="qCat" class="form-select mb-2"></select>
+  <select id="qType" class="form-select mb-2"><option value="single">单选题</option><option value="multi">多选题</option><option value="judge">判断题</option></select>
+  <textarea id="qContent" class="form-control mb-2" placeholder="题目内容" rows="3"></textarea>
+  <input id="qOpts" class="form-control mb-2" placeholder='选项 JSON: {"A":"...","B":"..."}'>
+  <input id="qAnswer" class="form-control mb-2" placeholder="正确答案 (如 B 或 ABD)">
+  <input id="qAnalysis" class="form-control mb-3" placeholder="解析">
+  <button class="btn btn-primary w-100 rounded-pill" onclick="addQuestion()">确认添加</button>
+  <button class="btn btn-light w-100 mt-2 rounded-pill" data-bs-dismiss="modal">取消</button>
+</div></div></div>
+
+<!-- 详情弹窗 -->
+<div class="modal fade" id="detailModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content p-3" id="detailContent"></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-let token='',user=null,examQs=[],examAnswered={};
+const API='';
+let token='',user={};
+let examQs=[],examAnswered={},curCat=0;
 
-// ===== Auth =====
-async function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value;
-  try{
-    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
-    const d=await r.json();
-    if(d.code!==200){document.getElementById('loginErr').style.display='block';return}
-    token=d.data.token;user=d.data;
-    document.cookie='token='+token+';max-age=604800;path=/';
-    showApp();
-  }catch(e){document.getElementById('loginErr').style.display='block'}
-}
+// Auth
+async function doLogin(e){e.preventDefault();
+  const u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value;
+  const r=await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:u,password:p})});
+  if(r.code!==200){document.getElementById('loginErr').classList.remove('d-none');return}
+  token=r.data.token;document.cookie='token='+token+';max-age=604800;path=/';
+  user=r.data;showApp()}
 
 function doLogout(){document.cookie='token=;max-age=0';location.reload()}
 
-function api(path,opt={}){
-  const h={'Content-Type':'application/json'};
-  if(token)h['Authorization']='Bearer '+token;
-  return fetch(path,{headers:h,...opt}).then(r=>r.json());
+async function api(path,opt={}){
+  const h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;
+  return fetch(API+path,{headers:h,...opt}).then(r=>r.json());
 }
 
 async function showApp(){
-  document.getElementById('loginPage').style.display='none';
-  document.getElementById('appPage').style.display='block';
-  document.getElementById('userInfo').textContent=user.realName+' · '+user.department;
-  if(user.role==='admin'||user.role==='manager') document.getElementById('tabManage').style.display='flex';
+  document.getElementById('loginPage').classList.add('d-none');
+  document.getElementById('appPage').classList.remove('d-none');
+  document.getElementById('userBadge').innerHTML=`<i class="bi bi-person-circle me-1"></i>${user.realName} · ${user.department}`;
+  document.getElementById('mobileUser').textContent=user.realName;
+  if(user.role==='admin'||user.role==='manager'){
+    document.getElementById('navManage').classList.remove('d-none');
+    document.getElementById('mbManage').classList.remove('d-none');
+  }
   await loadDashboard();
 }
 
-// ===== Tabs =====
-document.querySelectorAll('.tab[data-page]').forEach(t=>{
-  t.addEventListener('click',function(){
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    this.classList.add('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    const pageId='page-'+this.dataset.page;
-    document.getElementById(pageId).classList.add('active');
-    document.getElementById('pageTitle').textContent={'dashboard':'数据看板','exam':'在线考试','history':'考试记录','manage':'系统管理'}[this.dataset.page];
-    if(this.dataset.page==='dashboard')loadDashboard();
-    if(this.dataset.page==='history')loadHistory();
-    if(this.dataset.page==='manage')loadManage();
-    if(this.dataset.page==='exam')loadExamPage();
-  });
-});
+function switchTab(tab,el){
+  ['dashboard','exam','history','manage'].forEach(t=>document.getElementById('tab-'+t).classList.add('d-none'));
+  document.getElementById('tab-'+tab).classList.remove('d-none');
+  document.getElementById('mobileTitle').textContent={'dashboard':'📊 数据看板','exam':'📝 在线考试','history':'📋 成绩记录','manage':'⚙️ 系统管理'}[tab];
+  document.querySelectorAll('.sidebar .nav-link,.navbar .nav-link').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+  if(tab==='dashboard')loadDashboard();
+  if(tab==='history')loadHistory();
+  if(tab==='manage')loadManage();
+  if(tab==='exam')loadExamPage();
+}
 
-// ===== Dashboard =====
+// Dashboard
 async function loadDashboard(){
-  const ep=user.role==='employee'?'/api/score/my':'/api/statistics/overview';
   if(user.role==='employee'){await loadEmployeeDashboard();return}
-  const d=await api(ep);
+  const d=await api('/api/statistics/overview');
   if(d.code!==200)return;
   const s=d.data;
   document.getElementById('statCards').innerHTML=`
-    <div class="stat-card"><div class="num">${s.totalExams}</div><div class="label">考试总次数</div></div>
-    <div class="stat-card"><div class="num">${s.totalUsers}</div><div class="label">员工人数</div></div>
-    <div class="stat-card"><div class="num" style="color:${s.avgScore>=80?'#07c160':s.avgScore>=60?'#ff6b00':'#ee0a24'}">${s.avgScore}</div><div class="label">平均分</div></div>
-    <div class="stat-card"><div class="num" style="color:${s.passRate>=80?'#07c160':'#ff6b00'}">${s.passRate}%</div><div class="label">及格率</div></div>`;
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num">${s.totalExams}</div><div class="label">考试总次数</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num">${s.totalUsers}</div><div class="label">员工人数</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num" style="color:${s.avgScore>=80?'var(--bs-success)':s.avgScore>=60?'var(--bs-warning)':'var(--bs-danger)'}">${s.avgScore}</div><div class="label">平均分</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num" style="color:${s.passRate>=80?'var(--bs-success)':'var(--bs-warning)'}">${s.passRate}%</div><div class="label">及格率</div></div></div>`;
   
-  let deptHtml='<tr><th>部门</th><th>次数</th><th>均分</th><th>及格率</th></tr>';
-  (s.departmentStats||[]).forEach(d=>{deptHtml+=`<tr><td><b>${d.department}</b></td><td>${d.total}</td><td>${d.avgScore}</td><td><span class="badge ${d.passRate>=80?'badge-pass':d.passRate>=60?'badge-warn':'badge-fail'}">${d.passRate}%</span></td></tr>`});
-  document.getElementById('deptStats').innerHTML=deptHtml;
+  let html='<div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>部门</th><th>次数</th><th>均分</th><th>及格率</th></tr></thead><tbody>';
+  (s.departmentStats||[]).forEach(d=>{html+=`<tr><td><b>${d.department}</b></td><td>${d.total}</td><td>${d.avgScore}</td><td><span class="badge rounded-pill ${d.passRate>=80?'bg-success':d.passRate>=60?'bg-warning':'bg-danger'}">${d.passRate}%</span></td></tr>`});
+  html+='</tbody></table></div>';
+  document.getElementById('deptStats').innerHTML='<h6 class="fw-bold mb-3">🏢 部门统计</h6>'+html;
   
-  // Recent
-  if(user.role!=='employee'){
-    const r=await api('/api/score/all');
-    if(r.code===200){
-      let html='<tr><th>姓名</th><th>部门</th><th>分数</th><th>时间</th></tr>';
-      r.data.slice(0,10).forEach(x=>{html+=`<tr><td><b>${x.userName}</b></td><td>${x.department||''}</td><td style="color:${x.score/x.maxScore*100>=80?'#07c160':'#ee0a24'}">${x.score}/${x.maxScore}</td><td style="font-size:12px;color:#999">${x.time}</td></tr>`});
-      document.getElementById('recentExams').innerHTML=html;
-    }
+  const r=await api('/api/score/all');
+  if(r.code===200&&r.data.length){
+    let rh='<div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>姓名</th><th>部门</th><th>分数</th><th>时间</th></tr></thead><tbody>';
+    r.data.slice(0,10).forEach(x=>{rh+=`<tr><td><b>${x.userName}</b></td><td>${x.department||''}</td><td><span class="fw-bold ${x.score/x.maxScore*100>=80?'text-success':'text-danger'}">${x.score}/${x.maxScore}</span></td><td class="text-muted small">${x.time}</td></tr>`});
+    rh+='</tbody></table></div>';
+    document.getElementById('recentExams').innerHTML='<h6 class="fw-bold mb-3">🕐 最近考试</h6>'+rh;
   }
 }
 
 async function loadEmployeeDashboard(){
   const d=await api('/api/score/my');
-  if(d.code!==200)return;
-  const scores=d.data||[];
-  const avg=scores.length?Math.round(scores.reduce((s,x)=>s+x.score,0)/scores.length):0;
+  const scores=d.data||[],avg=scores.length?Math.round(scores.reduce((s,x)=>s+x.score,0)/scores.length):0;
   const last=scores[0]||null;
   document.getElementById('statCards').innerHTML=`
-    <div class="stat-card"><div class="num">${scores.length}</div><div class="label">考试次数</div></div>
-    <div class="stat-card"><div class="num" style="color:${avg>=80?'#07c160':avg>=60?'#ff6b00':'#ee0a24'}">${avg}</div><div class="label">平均分</div></div>
-    <div class="stat-card"><div class="num" style="color:${last&&last.score>=80?'#07c160':'#ee0a24'}">${last?last.score:'-'}</div><div class="label">最近成绩</div></div>
-    <div class="stat-card"><div class="num">${scores.filter(x=>x.score>=80).length}</div><div class="label">及格次数</div></div>`;
-  let html='<tr><th>时间</th><th>分数</th><th>正确率</th></tr>';
-  scores.slice(0,10).forEach(s=>{html+=`<tr><td style="font-size:12px;color:#999">${s.time}</td><td><b>${s.score}/${s.maxScore}</b></td><td><span class="badge ${s.score/s.maxScore*100>=80?'badge-pass':'badge-fail'}">${Math.round(s.score/s.maxScore*100)}%</span></td></tr>`});
-  document.getElementById('recentExams').innerHTML=html;
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num">${scores.length}</div><div class="label">考试次数</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num" style="color:${avg>=80?'var(--bs-success)':'var(--bs-warning)'}">${avg}</div><div class="label">平均分</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num" style="color:${last&&last.score>=80?'var(--bs-success)':'var(--bs-danger)'}">${last?last.score:'-'}</div><div class="label">最近成绩</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card text-center"><div class="num">${scores.filter(x=>x.score>=80).length}</div><div class="label">及格次数</div></div></div>`;
+  let rh='<div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>时间</th><th>分数</th><th>正确率</th></tr></thead><tbody>';
+  scores.slice(0,10).forEach(s=>{rh+=`<tr><td class="text-muted small">${s.time}</td><td class="fw-bold">${s.score}/${s.maxScore}</td><td><span class="badge rounded-pill ${s.score/s.maxScore*100>=80?'bg-success':'bg-danger'}">${Math.round(s.score/s.maxScore*100)}%</span></td></tr>`});
+  rh+='</tbody></table></div>';
+  document.getElementById('recentExams').innerHTML='<h6 class="fw-bold mb-3">🕐 考试记录</h6>'+rh;
 }
 
-// ===== Exam =====
+// Exam
 async function loadExamPage(){
   const c=await api('/api/question/categories');
   if(c.code!==200)return;
-  let html='<div class="chip active" onclick="filterCat(0,this)">全部</div>';
-  c.data.forEach(cat=>{html+=`<div class="chip" onclick="filterCat(${cat.id},this)">${cat.name}</div>`});
+  let html='';
+  c.data.forEach(cat=>{html+=`<button class="btn btn-outline-primary btn-sm rounded-pill me-2 mb-2" onclick="filterCat(${cat.id},this,event)">${cat.name}</button>`});
   document.getElementById('catFilter').innerHTML=html;
 }
 
-let curCat=0;
-async function filterCat(cid,el){
+async function filterCat(cid,el,ev){
   curCat=cid;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('#catFilter .btn').forEach(b=>b.classList.remove('btn-primary','text-white'));el.classList.add('btn-primary','text-white');
+  if(ev&&ev.target.closest('#btnSubmit'))return;
   const r=await api('/api/question/random?categoryId='+(cid||'')+'&count=20');
-  if(r.code===200){examQs=r.data;renderExamQuestions()}
+  if(r.code===200&&r.data.length){examQs=r.data;renderExam()}
 }
 
-function renderExamQuestions(){
-  if(!examQs.length){document.getElementById('examQuestions').innerHTML='<div class="empty">该分类暂无题目</div>';return}
-  let html='';
+function renderExam(){
+  if(!examQs.length){document.getElementById('examContent').innerHTML='<div class="text-center py-5 text-muted">该分类暂无题目</div>';return}
+  let html='<div class="question-nav d-flex flex-wrap gap-1 mb-3">';
+  examQs.forEach((_,i)=>html+=`<a href="#q${i+1}" class="btn btn-sm btn-outline-secondary rounded-pill" style="min-width:36px">${i+1}</a>`);
+  html+='</div>';
   examQs.forEach((q,i)=>{
-    html+=`<div class="q-block"><span class="q-num">${i+1}</span>${q.type==='multi'?'【多选】':q.type==='judge'?'【判断】':'【单选】'}<div class="q-text">${q.content}</div>`;
+    html+=`<div class="card border-0 shadow-sm mb-3 card-q" id="q${i+1}"><div class="card-body"><div class="d-flex align-items-center gap-2 mb-2"><span class="badge bg-primary rounded-pill">${i+1}</span><span class="badge-type ${q.type==='single'?'bg-info':q.type==='multi'?'bg-purple':'bg-warning'} text-dark">${q.type==='single'?'单选':q.type==='multi'?'多选':'判断'}</span></div><p class="fw-medium">${q.content}</p><div class="list-group">`;
     try{
       const opts=typeof q.options==='string'?JSON.parse(q.options):q.options;
       Object.entries(opts).forEach(([k,v])=>{
-        html+=`<div class="opt" data-q="${q.id}" data-val="${k}" onclick="selOpt(this,'${q.type}')"><span class="mark">${k}</span>${v}</div>`;
+        html+=`<div class="list-group-item d-flex align-items-center gap-2" data-q="${q.id}" data-val="${k}" onclick="selOpt(this,'${q.type}')"><span class="badge bg-light text-dark rounded-pill" style="min-width:28px">${k}</span>${v}</div>`;
       });
     }catch(e){}
-    html+=`</div>`;
+    html+='</div></div></div>';
   });
-  document.getElementById('examQuestions').innerHTML=html;
-  document.getElementById('submitBtn').style.display='block';
+  document.getElementById('examContent').innerHTML=html;
+  document.getElementById('btnSubmit').classList.remove('d-none');
   examAnswered={};
 }
 
 function selOpt(el,type){
-  const card=el.closest('.q-block');
-  if(type==='multi'){el.classList.toggle('sel')}
-  else{card.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel')}
+  const card=el.closest('.card-q');
+  if(type==='multi'){el.classList.toggle('selected')}
+  else{card.querySelectorAll('.list-group-item').forEach(o=>o.classList.remove('selected'));el.classList.add('selected')}
+  card.classList.add('answered');
   const qid=el.dataset.q;
-  const sels=Array.from(card.querySelectorAll('.opt.sel')).map(o=>o.dataset.val);
+  const sels=Array.from(card.querySelectorAll('.list-group-item.selected')).map(o=>o.dataset.val);
   examAnswered[qid]=sels.sort().join('');
 }
 
 async function startExam(){
-  await filterCat(curCat, document.querySelector('.chip.active')||document.querySelector('.chip'));
-  document.getElementById('examResult').style.display='none';
+  await filterCat(curCat, document.querySelector('#catFilter .btn-primary')||document.querySelector('#catFilter .btn'));
   document.getElementById('examResult').innerHTML='';
 }
 
 async function submitExam(){
   if(!Object.keys(examAnswered).length){alert('请先答题');return}
-  if(!confirm('确定提交？'))return;
+  if(!confirm('确定提交答卷？'))return;
   const r=await api('/api/exam/submit',{method:'POST',body:JSON.stringify({answers:examAnswered})});
   if(r.code!==200){alert('提交失败');return}
-  const s=r.data;
-  document.getElementById('submitBtn').style.display='none';
-  document.getElementById('examQuestions').style.display='none';
+  const s=r.data,pct=Math.round(s.score/s.maxScore*100);
+  document.getElementById('btnSubmit').classList.add('d-none');
+  let html=`<div class="card border-0 shadow-sm mt-4"><div class="card-body text-center py-4">
+    <div class="display-4 fw-bold ${pct>=80?'text-success':pct>=60?'text-warning':'text-danger'}">${s.score}<span class="fs-5 text-muted">/${s.maxScore}</span></div>
+    <div class="text-muted mb-3">答对 ${s.correct}/${s.total} 题 · ${pct}%</div>
+    <div class="result-bar mx-auto mb-3" style="max-width:300px"><div class="h-100 rounded" style="width:${pct}%;background:${pct>=80?'var(--bs-success)':pct>=60?'var(--bs-warning)':'var(--bs-danger)'}"></div></div>
+    <h5 class="${pct>=90?'text-success':pct>=80?'text-success':pct>=60?'text-warning':'text-danger'}">${pct>=90?'🏆 优秀':pct>=80?'✅ 合格':pct>=60?'⚠️ 需加强':'❌ 不合格'}</h5>
+    <button class="btn btn-primary rounded-pill mt-3" onclick="location.reload()">🔄 重新考试</button></div></div>`;
   
-  const pct=Math.round(s.score/s.maxScore*100);
-  let resultHtml=`<div class="result-score" style="color:${pct>=80?'#07c160':pct>=60?'#ff6b00':'#ee0a24'}">${s.score}<span style="font-size:20px;color:#999">/${s.maxScore}</span></div>
-    <div style="color:#999">答对 ${s.correct}/${s.total} 题 · ${pct}%</div>
-    <div class="result-bar"><div class="result-bar-inner" style="width:${pct}%;background:${pct>=80?'#07c160':pct>=60?'#ff6b00':'#ee0a24'}"></div></div>
-    <div style="font-size:18px;font-weight:700;color:${pct>=80?'#07c160':pct>=60?'#ff6b00':'#ee0a24'}">${pct>=90?'🏆 优秀':pct>=80?'✅ 合格':pct>=60?'⚠️ 需加强':'❌ 不合格'}</div>
-    <button class="btn btn-pri" style="margin-top:12px" onclick="location.reload()">🔄 重新考试</button>`;
-  document.getElementById('examResult').innerHTML=resultHtml;
-  document.getElementById('examResult').style.display='block';
-  
-  // Show detail analysis below
-  let detailHtml='<h3 style="margin:16px 0 12px">📖 答题解析</h3>';
   s.details.forEach((d,i)=>{
     let optsHtml='';
-    try{
-      const opts=typeof d.options==='string'?JSON.parse(d.options):d.options;
-      Object.entries(opts).forEach(([k,v])=>{
-        const isUser=d.userAnswer.includes(k);
-        const isRight=d.correctAnswer.includes(k);
-        let cls='';if(isUser&&isRight)cls='correct';else if(isUser&&!isRight)cls='wrong';else if(isRight)cls='correct';
-        optsHtml+=`<div class="opt ${cls}"><span class="mark">${k}</span>${v}${isUser?' ← 你的答案':''}${isRight&&!isUser?' ← 正确':''}</div>`;
-      });
-    }catch(e){}
-    detailHtml+=`<div class="q-block" style="border-left:3px solid ${d.isCorrect?'#07c160':'#ee0a24'}">
-      <span class="q-num">${i+1}</span>${d.isCorrect?'✅':'❌'} ${d.score}/${d.maxScore}分
-      <div class="q-text">${d.content}</div>
-      ${optsHtml}
-      <div class="analysis ${d.isCorrect?'ok':'err'}">💡 ${d.analysis||'暂无解析'}</div>
-    </div>`;
+    try{const opts=typeof d.options==='string'?JSON.parse(d.options):d.options;
+    Object.entries(opts).forEach(([k,v])=>{
+      const isU=d.userAnswer.includes(k),isR=d.correctAnswer.includes(k);
+      let cls=isU&&isR?'correct':isU&&!isR?'wrong':isR?'correct':'';
+      optsHtml+=`<div class="list-group-item ${cls} d-flex align-items-center gap-2"><span class="badge bg-light text-dark rounded-pill">${k}</span>${v}${isU?' ← 你的答案':''}${isR&&!isU?' ← 正确':''}</div>`;
+    })}catch(e){}
+    html+=`<div class="card border-0 shadow-sm mt-2" style="border-left:4px solid ${d.isCorrect?'var(--bs-success)':'var(--bs-danger)'}!important"><div class="card-body">
+      <span class="badge bg-primary rounded-pill me-2">${i+1}</span>${d.isCorrect?'✅':'❌'} ${d.score}/${d.maxScore}分
+      <p class="fw-medium mt-2">${d.content}</p>${optsHtml}
+      <div class="alert ${d.isCorrect?'alert-success':'alert-danger'} py-2 mt-2 mb-0 small">💡 ${d.analysis||'暂无解析'}</div></div></div>`;
   });
-  document.getElementById('examResult').innerHTML+=detailHtml;
-  
-  // Refresh dashboard stats
+  document.getElementById('examResult').innerHTML=html;
   setTimeout(loadDashboard,500);
 }
 
-// ===== History =====
+// History
 async function loadHistory(){
   const r=await api(user.role==='employee'?'/api/score/my':'/api/score/all');
-  if(r.code!==200||!r.data.length){document.getElementById('historyEmpty').style.display='block';document.getElementById('historyTable').style.display='none';return}
-  document.getElementById('historyEmpty').style.display='none';
-  document.getElementById('historyTable').style.display='';
-  let html='<tr><th>姓名</th><th>部门</th><th>分数</th><th>正确</th><th>时间</th><th>操作</th></tr>';
+  if(!r.data||!r.data.length){document.getElementById('historyTable').innerHTML='<div class="text-center py-5 text-muted">暂无考试记录</div>';return}
+  let html='<div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>姓名</th><th>部门</th><th>分数</th><th>正确</th><th>时间</th><th>操作</th></tr></thead><tbody>';
   r.data.forEach(x=>{
-    html+=`<tr><td><b>${x.userName||''}</b></td><td style="font-size:12px">${x.department||''}</td>
-      <td style="color:${x.score/x.maxScore*100>=80?'#07c160':'#ee0a24'}"><b>${x.score}/${x.maxScore}</b></td>
-      <td>${x.correct}/${x.total}</td><td style="font-size:11px;color:#999">${x.time}</td>
-      <td><button class="btn btn-pri btn-sm" onclick="viewDetail(${x.id})">查看</button></td></tr>`;
+    html+=`<tr><td><b>${x.userName||''}</b></td><td class="text-muted small">${x.department||''}</td>
+      <td class="fw-bold ${x.score/x.maxScore*100>=80?'text-success':'text-danger'}">${x.score}/${x.maxScore}</td>
+      <td>${x.correct}/${x.total}</td><td class="text-muted small">${x.time}</td>
+      <td><button class="btn btn-sm btn-outline-primary rounded-pill" onclick="viewDetail(${x.id})">查看</button></td></tr>`;
   });
+  html+='</tbody></table></div>';
   document.getElementById('historyTable').innerHTML=html;
 }
 
 async function viewDetail(rid){
   const r=await api('/api/score/detail/'+rid);
   if(r.code!==200)return;
-  let html='<h3>📖 考试详情</h3><div style="text-align:center;padding:12px">';
-  html+=`<div style="font-size:36px;font-weight:800;color:${r.data.score/r.data.maxScore*100>=80?'#07c160':'#ee0a24'}">${r.data.score}/${r.data.maxScore}</div>`;
-  html+=`<div style="color:#999">${r.data.userName} · ${r.data.time}</div></div>`;
+  let html=`<h5 class="fw-bold mb-3">📖 考试详情</h5><div class="text-center py-3"><div class="display-4 fw-bold ${r.data.score/r.data.maxScore*100>=80?'text-success':'text-danger'}">${r.data.score}/${r.data.maxScore}</div><div class="text-muted">${r.data.userName} · ${r.data.time}</div></div>`;
   (r.data.details||[]).forEach((d,i)=>{
-    html+=`<div style="padding:10px 0;border-bottom:1px solid #f0f0f0"><b>${i+1}.</b> ${d.isCorrect?'✅':'❌'} ${d.content||''}<br>
-    <span style="font-size:13px;color:#999">你的答案:${d.userAnswer} 正确:${d.correctAnswer}</span>
-    ${d.analysis?`<div class="analysis ${d.isCorrect?'ok':'err'}" style="margin-top:8px">💡 ${d.analysis}</div>`:''}</div>`;
+    html+=`<div class="p-3 border-bottom"><b>${i+1}.</b> ${d.isCorrect?'✅':'❌'} ${d.content||''}
+      <div class="text-muted small mt-1">你的答案:${d.userAnswer} 正确:${d.correctAnswer}</div>
+      ${d.analysis?`<div class="alert ${d.isCorrect?'alert-success':'alert-danger'} py-1 mt-2 mb-0 small">💡 ${d.analysis}</div>`:''}</div>`;
   });
   document.getElementById('detailContent').innerHTML=html;
-  showModal('detailModal');
+  new bootstrap.Modal(document.getElementById('detailModal')).show();
 }
 
-// ===== Manage =====
+// Manage
 async function loadManage(){
   const qs=await api('/api/question/list');
   const cats=await api('/api/question/categories');
   const catMap={};if(cats.code===200)cats.data.forEach(c=>catMap[c.id]=c.name);
+  let sel='';if(cats.code===200)cats.data.forEach(c=>sel+=`<option value="${c.id}">${c.name}</option>`);
+  document.getElementById('qCat').innerHTML=sel;
   
-  let sel=`<select id="qCat">`;
-  if(cats.code===200)cats.data.forEach(c=>sel+=`<option value="${c.id}">${c.name}</option>`);
-  sel+=`</select>`;
-  document.getElementById('qCat').outerHTML=sel;
-  
-  let html='<h4 style="margin-bottom:8px">📝 题库（共 '+qs.data.length+' 题）</h4>';
+  let html=`<p class="text-muted small mb-2">共 ${qs.data.length} 题</p>`;
   qs.data.forEach(q=>{
-    html+=`<div class="q-block" style="font-size:13px">
-      <span class="badge" style="background:${q.type==='single'?'#e3f2fd':q.type==='multi'?'#f3e5f5':'#fff3e0'};color:${q.type==='single'?'#1565c0':q.type==='multi'?'#7b1fa2':'#e65100'}">${q.type==='single'?'单选':q.type==='multi'?'多选':'判断'}</span>
-      ${catMap[q.categoryId]||'分类'+q.categoryId} · 答案:<b style="color:#07c160">${q.answer}</b>
-      <div style="margin:4px 0">${q.content}</div>
-      <div style="font-size:11px;color:#999">${q.analysis||''}</div>
-      <button class="btn btn-danger btn-sm" style="margin-top:4px" onclick="delQ(${q.id})">删除</button>
-    </div>`;
+    html+=`<div class="card border-0 shadow-sm mb-2"><div class="card-body py-2">
+      <span class="badge rounded-pill ${q.type==='single'?'bg-info':q.type==='multi'?'bg-purple':'bg-warning'} text-dark me-1">${q.type==='single'?'单选':q.type==='multi'?'多选':'判断'}</span>
+      <span class="text-muted small">${catMap[q.categoryId]||''} · 答案:<b class="text-success">${q.answer}</b></span>
+      <p class="mb-1 mt-1">${q.content}</p>
+      <small class="text-muted">${q.analysis||''}</small>
+      <button class="btn btn-sm btn-outline-danger rounded-pill float-end" onclick="delQ(${q.id})">删除</button></div></div>`;
   });
   document.getElementById('manageContent').innerHTML=html;
 }
 
 async function addQuestion(){
-  const data={
-    categoryId:parseInt(document.getElementById('qCat').value)||1,
-    type:document.getElementById('qType').value,
-    content:document.getElementById('qContent').value,
-    options:document.getElementById('qOpts').value,
-    answer:document.getElementById('qAnswer').value.toUpperCase(),
-    analysis:document.getElementById('qAnalysis').value,
-    difficulty:1,score:5
-  };
-  await api('/api/question/add',{method:'POST',body:JSON.stringify(data)});
-  hideModal('qModal');loadManage();
+  const d={categoryId:parseInt(document.getElementById('qCat').value)||1,type:document.getElementById('qType').value,content:document.getElementById('qContent').value,options:document.getElementById('qOpts').value,answer:document.getElementById('qAnswer').value.toUpperCase(),analysis:document.getElementById('qAnalysis').value,difficulty:1,score:5};
+  await api('/api/question/add',{method:'POST',body:JSON.stringify(d)});
+  bootstrap.Modal.getInstance(document.getElementById('qModal')).hide();loadManage();
 }
 
 async function delQ(id){if(confirm('确定删除？')){await api('/api/question/delete',{method:'POST',body:JSON.stringify({id})});loadManage()}}
 async function addUser(){
-  await api('/api/user/add',{method:'POST',body:JSON.stringify({
-    name:document.getElementById('uName').value,
-    username:document.getElementById('uUsername').value,
-    password:document.getElementById('uPassword').value,
-    role:document.getElementById('uRole').value,
-    department:document.getElementById('uDept').value
-  })});
-  hideModal('uModal');alert('添加成功，密码: '+document.getElementById('uPassword').value);
+  await api('/api/user/add',{method:'POST',body:JSON.stringify({name:document.getElementById('uName').value,username:document.getElementById('uUsername').value,password:document.getElementById('uPassword').value,role:document.getElementById('uRole').value,department:document.getElementById('uDept').value})});
+  bootstrap.Modal.getInstance(document.getElementById('uModal')).hide();alert('添加成功')
 }
 
-function showModal(id){document.getElementById(id).classList.add('show')}
-function hideModal(id){document.getElementById(id).classList.remove('show')}
+function showQModal(){document.getElementById('qContent').value='';document.getElementById('qOpts').value='';document.getElementById('qAnswer').value='';document.getElementById('qAnalysis').value='';new bootstrap.Modal(document.getElementById('qModal')).show()}
+function showUModal(){new bootstrap.Modal(document.createElement('div')).show();alert('功能开发中')}
 
 // Init
 (async function(){
-  const cookies=document.cookie.split(';');
-  for(let c of cookies){if(c.trim().startsWith('token=')){token=c.trim().substring(6);break}}
-  if(token){
-    try{
-      const r=await api('/api/user/info');
-      if(r.code===200){user=r.data;showApp();return}
-    }catch(e){}
-  }
-  document.getElementById('loginPage').style.display='flex';
+  const c=document.cookie.split(';');
+  for(let ck of c){if(ck.trim().startsWith('token=')){token=ck.trim().substring(6);break}}
+  if(token){const r=await api('/api/user/info');if(r.code===200){user=r.data;showApp();return}}
+  document.getElementById('loginPage').classList.remove('d-none');
 })();
 </script>
 </body>
